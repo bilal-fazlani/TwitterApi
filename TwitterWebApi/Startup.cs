@@ -38,7 +38,7 @@ namespace TwitterWebApi
             //services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddMvc();
-
+            services.AddCors();
             services.AddSingleton<IConfigurationRoot>(Configuration);
         }
 
@@ -51,6 +51,8 @@ namespace TwitterWebApi
             //app.UseApplicationInsightsRequestTelemetry();
 
             //app.UseApplicationInsightsExceptionTelemetry();
+
+            app.UseCors(builder => builder.WithOrigins("http://localhost:8000"));
 
             app.UseMvcWithDefaultRoute();
         }

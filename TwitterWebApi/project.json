@@ -18,7 +18,8 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
     "linqtotwitter" : "4.1.0",
     "System.Xml.XmlSerializer": "4.3.0",
-    "MongoDB.Driver": "2.4.0"
+    "MongoDB.Driver": "2.4.0",
+    "Microsoft.AspNetCore.Cors": "*"
   },
 
   "tools": {
