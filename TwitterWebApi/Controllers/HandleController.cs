@@ -52,11 +52,4 @@ namespace TwitterWebApi.Controllers
             return StatusCode((int) HttpStatusCode.OK);
         }
     }
-
-    public class Handle
-    {
-        public ObjectId _id { get; set; }
-
-        public string name { get; set; }
-    }
 }
