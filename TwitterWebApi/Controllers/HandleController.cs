@@ -31,7 +31,7 @@ namespace TwitterWebApi.Controllers
         public async Task<IActionResult> Add([FromBody]Handle handle)
         {
             await _handleService.AddHandle(handle);
-            return StatusCode(((int) HttpStatusCode.Created), handle._id.ToString());
+            return StatusCode(((int) HttpStatusCode.Created), new {id = handle._id.ToString()});
         }
 
         [HttpDelete]
