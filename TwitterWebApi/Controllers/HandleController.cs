@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,11 @@ namespace TwitterWebApi.Controllers
         {
             var handles =
                 (await _handleService.Gethandles())
-                    .Select(x => new {name = x.name, _id = x._id.ToString()});
+                    .Select(x => new
+                {
+                    x.name,
+                    id = x._id.ToString()
+                });
 
             return Json(handles);
         }
@@ -30,8 +35,13 @@ namespace TwitterWebApi.Controllers
         [Route("/api/handle")]
         public async Task<IActionResult> Add([FromBody]Handle handle)
         {
+            await Task.Delay(TimeSpan.FromSeconds(2));
             await _handleService.AddHandle(handle);
-            return StatusCode(((int) HttpStatusCode.Created), new {id = handle._id.ToString()});
+            return StatusCode(((int) HttpStatusCode.Created), new
+            {
+                id = handle._id.ToString(),
+                handle.localId
+            });
         }
 
         [HttpDelete]
