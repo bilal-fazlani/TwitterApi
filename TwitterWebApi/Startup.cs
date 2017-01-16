@@ -50,7 +50,7 @@ namespace TwitterWebApi
 
             //app.UseApplicationInsightsExceptionTelemetry();
 
-            app.UseCors(builder => builder.WithOrigins("http://localhost:8000"));
+            app.UseCors(builder => builder.WithOrigins("http://localhost:8000").AllowAnyHeader().AllowAnyMethod());
 
             app.UseMvcWithDefaultRoute();
         }
