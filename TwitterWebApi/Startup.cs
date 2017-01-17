@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using TwitterWebApi.Services;
+using TwitterWebApi.Services.Handle;
 
 namespace TwitterWebApi
 {
@@ -36,7 +36,7 @@ namespace TwitterWebApi
 
             services.AddMvc();
             services.AddCors();
-            services.AddSingleton<IConfigurationRoot>(Configuration);
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<IHandleService, InMemoryHandleService>();
         }
 

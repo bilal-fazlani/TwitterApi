@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 
-namespace TwitterWebApi
+namespace TwitterWebApi.Models
 {
     public class Handle
     {

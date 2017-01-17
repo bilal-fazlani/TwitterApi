@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TwitterWebApi.Services;
+using TwitterWebApi.Models;
+using TwitterWebApi.Services.Handle;
 
 namespace TwitterWebApi.Controllers
 {
