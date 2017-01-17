@@ -35,7 +35,6 @@ namespace TwitterWebApi.Controllers
         [Route("/api/handle")]
         public async Task<IActionResult> Add([FromBody]Handle handle)
         {
-            await Task.Delay(TimeSpan.FromSeconds(2));
             await _handleService.AddHandle(handle);
             return StatusCode(((int) HttpStatusCode.Created), new
             {

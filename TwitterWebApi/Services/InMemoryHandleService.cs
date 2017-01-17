@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Bson;
@@ -9,11 +10,11 @@ namespace TwitterWebApi.Services
     {
         private readonly Dictionary<ObjectId, Handle> _data = new Dictionary<ObjectId, Handle>();
 
-        public Task AddHandle(Handle handle)
+        public async Task AddHandle(Handle handle)
         {
+            await Task.Delay(TimeSpan.FromSeconds(2));
             handle._id = ObjectId.GenerateNewId();
             _data.Add(handle._id, handle);
-            return Task.CompletedTask;
         }
 
         public Task<IEnumerable<Handle>> Gethandles()
