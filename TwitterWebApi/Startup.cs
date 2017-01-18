@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TwitterWebApi.Services.Handle;
+using TwitterWebApi.Services.TwitterSearch;
 
 namespace TwitterWebApi
 {
@@ -38,6 +39,7 @@ namespace TwitterWebApi
             services.AddCors();
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<IHandleService, InMemoryHandleService>();
+            services.AddSingleton<ITwitterSearchService, FakeSearch>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
