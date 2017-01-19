@@ -10,7 +10,7 @@ namespace TwitterWebApi
 {
     public class Startup
     {
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         public Startup(IHostingEnvironment env)
         {
@@ -19,12 +19,6 @@ namespace TwitterWebApi
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
-//            if (env.IsEnvironment("Development"))
-//            {
-//                // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
-//                builder.AddApplicationInsightsSettings(developerMode: true);
-//            }
-
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
         }
@@ -32,14 +26,11 @@ namespace TwitterWebApi
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            //services.AddApplicationInsightsTelemetry(Configuration);
-
             services.AddMvc();
             services.AddCors();
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddSingleton<IHandleService, InMemoryHandleService>();
-            services.AddSingleton<ITwitterSearchService, FakeSearch>();
+            services.AddSingleton<IHandleService, HandleService>();
+            services.AddSingleton<ITwitterSearchService, TwitterSearchService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
@@ -47,10 +38,6 @@ namespace TwitterWebApi
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
-            //app.UseApplicationInsightsRequestTelemetry();
-
-            //app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseCors(builder => builder.WithOrigins("http://localhost:8000").AllowAnyHeader().AllowAnyMethod());
 

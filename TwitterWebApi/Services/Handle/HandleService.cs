@@ -7,13 +7,13 @@ using MongoDB.Driver;
 
 namespace TwitterWebApi.Services.Handle
 {
-    public class OnlineHandleService : IHandleService
+    public class HandleService : IHandleService
     {
         private readonly MongoClient _client;
         private readonly IMongoDatabase _datebase;
         private readonly IMongoCollection<Models.Handle> _collection;
 
-        public OnlineHandleService(IConfigurationRoot configurationRoot)
+        public HandleService(IConfiguration configurationRoot)
         {
             _client = new MongoClient(configurationRoot["mongoConnectionString"]);
             _datebase = _client.GetDatabase("twitterdeck");
