@@ -17,5 +17,7 @@ namespace TwitterWebApi.Models
         public bool? IncludeRetweets { get; set; }
 
         public Tweet RetweetedTweet { get; set; }
+
+        public bool VerifiedUser { get; set; }
     }
 }
