@@ -11,5 +11,7 @@ namespace TwitterWebApi.Models
         public ulong StatusID { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
+        public string ProfilePicUrl { get; set; }
     }
 }

@@ -55,7 +55,8 @@ namespace TwitterWebApi.Services.TwitterSearch
                         Text = x.Text,
                         Name = x.User?.Name,
                         StatusID = x.StatusID,
-                        CreatedAt = x.CreatedAt
+                        CreatedAt = x.CreatedAt,
+                        ProfilePicUrl = x.User?.ProfileImageUrlHttps
                     }).ToList();
 
                 return new SearchResult
