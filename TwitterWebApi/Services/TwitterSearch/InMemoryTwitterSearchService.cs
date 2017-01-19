@@ -15,14 +15,14 @@ namespace TwitterWebApi.Services.TwitterSearch
     {
         public async Task<SearchResult> SearchAsync(string handle, int pageSize = 10, ulong? sinceId = null)
         {
-            await Task.Delay(TimeSpan.FromSeconds(2));
-
-            Search search = JsonConvert.DeserializeObject<Search>(File.ReadAllText("fakeresponse.json"));
+            Search search = JsonConvert.DeserializeObject<Search>(File.ReadAllText("lastresponse.json"));
 
             List<Tweet> statuses = search.Statuses
                 .Select(Mapper.Map<Tweet>).ToList();
 
-            Console.WriteLine("FAKE RESPONSE");
+            Console.WriteLine("/====================================================\\");
+            Console.WriteLine("|------------------- FAKE RESPONSE -------------------|");
+            Console.WriteLine("\\=====================================================/");
 
             return new SearchResult
             {

@@ -41,7 +41,7 @@ namespace TwitterWebApi.Services.TwitterSearch
             {
                 IQueryable<Search> query = from s in _twitterCtx.Search
                     where s.Type == SearchType.Search && s.Query == $"\"#{handle}\"" &&
-                          s.Count == pageSize && s.ResultType == ResultType.Recent
+                          s.Count == pageSize && s.ResultType == ResultType.Mixed
                     select s;
 
                 if (sinceId.HasValue) query = query.Where(x => x.SinceID == sinceId.Value);
@@ -51,7 +51,7 @@ namespace TwitterWebApi.Services.TwitterSearch
                 if (search == null)
                     throw new NoDataException("No search results found");
 
-                //File.WriteAllText("fakeresponse.json", JsonConvert.SerializeObject(search, Formatting.Indented));
+                File.WriteAllText("lastresponse.json", JsonConvert.SerializeObject(search, Formatting.Indented));
 
                 List<Tweet> statuses = search.Statuses
                     .Select(Mapper.Map<Tweet>).ToList();

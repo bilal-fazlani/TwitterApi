@@ -32,7 +32,7 @@ namespace TwitterWebApi
             services.AddCors();
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<IHandleService, HandleService>();
-            services.AddSingleton<ITwitterSearchService, InMemoryTwitterSearchService>();
+            services.AddSingleton<ITwitterSearchService, TwitterSearchService>();
 
             Mapper.Initialize(mapperConfiguration => mapperConfiguration.AddProfile(new TweetProfile()));
         }
