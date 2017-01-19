@@ -8,10 +8,14 @@ namespace TwitterWebApi.Models
 
         public string Name { get; set; }
 
-        public ulong StatusID { get; set; }
+        public ulong? StatusID { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         public string ProfilePicUrl { get; set; }
+
+        public bool? IncludeRetweets { get; set; }
+
+        public Tweet RetweetedTweet { get; set; }
     }
 }

@@ -19,7 +19,9 @@
     "linqtotwitter" : "4.1.0",
     "System.Xml.XmlSerializer": "4.3.0",
     "MongoDB.Driver": "2.4.0",
-    "Microsoft.AspNetCore.Cors": "*"
+    "Microsoft.AspNetCore.Cors": "*",
+    "Automapper": "*",
+    "Newtonsoft.Json": "*"
   },
 
   "tools": {

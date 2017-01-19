@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TwitterWebApi.Exceptions;
 using TwitterWebApi.Models;
@@ -28,10 +29,11 @@ namespace TwitterWebApi.Controllers
             }
             catch (ServerException ex)
             {
+                Exception e = ex.GetBaseException();
                 return StatusCode(500, new
                 {
-                    error= ex.Message,
-                    starckTrace = ex.StackTrace
+                    message = e.Message,
+                    starckTrace = e.StackTrace
                 });
             }
             catch (ValidationException ex)

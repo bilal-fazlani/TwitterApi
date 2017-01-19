@@ -1,8 +1,10 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TwitterWebApi.Models.AutomapperProfiles;
 using TwitterWebApi.Services.Handle;
 using TwitterWebApi.Services.TwitterSearch;
 
@@ -30,7 +32,9 @@ namespace TwitterWebApi
             services.AddCors();
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<IHandleService, HandleService>();
-            services.AddSingleton<ITwitterSearchService, TwitterSearchService>();
+            services.AddSingleton<ITwitterSearchService, InMemoryTwitterSearchService>();
+
+            Mapper.Initialize(mapperConfiguration => mapperConfiguration.AddProfile(new TweetProfile()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline

@@ -3,6 +3,23 @@
   "version": 2,
   "targets": {
     ".NETCoreApp,Version=v1.1": {
+      "Automapper/5.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.CSharp": "4.0.1",
+          "NETStandard.Library": "1.6.0",
+          "System.Collections.Specialized": "4.0.1",
+          "System.ComponentModel.TypeConverter": "4.1.0",
+          "System.Dynamic.Runtime": "4.0.11",
+          "System.Linq.Queryable": "4.0.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/AutoMapper.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/AutoMapper.dll": {}
+        }
+      },
       "Libuv/1.9.1": {
         "type": "package",
         "dependencies": {
@@ -3845,6 +3862,21 @@
     }
   },
   "libraries": {
+    "Automapper/5.2.0": {
+      "sha512": "ulUMmzFg1vAFMpTyJsplgnC7pOIFlb25dbldHd7J4eroQWjSV4iAoOQ33h1oMjf6mLo3uZ8aRNUN2rgpOeSE1w==",
+      "type": "package",
+      "path": "Automapper/5.2.0",
+      "files": [
+        "Automapper.5.2.0.nupkg.sha512",
+        "Automapper.nuspec",
+        "lib/net45/AutoMapper.dll",
+        "lib/net45/AutoMapper.xml",
+        "lib/netstandard1.1/AutoMapper.dll",
+        "lib/netstandard1.1/AutoMapper.xml",
+        "lib/netstandard1.3/AutoMapper.dll",
+        "lib/netstandard1.3/AutoMapper.xml"
+      ]
+    },
     "Libuv/1.9.1": {
       "sha512": "vGdMh3njiga4+8VsYv4rg2nnY9v2KCQV5rIWGQLibvQPd1uLYrEPO/xsEXRnO38YC3nJXlLAmThxJkt3mnBg/A==",
       "type": "package",
@@ -10460,6 +10492,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
+      "Automapper",
       "Microsoft.ApplicationInsights.AspNetCore >= 1.0.2",
       "Microsoft.AspNetCore.Cors",
       "Microsoft.AspNetCore.Mvc >= 1.1.0",
@@ -10475,6 +10508,7 @@
       "Microsoft.Extensions.Options.ConfigurationExtensions >= 1.1.0",
       "Microsoft.NETCore.App >= 1.1.0",
       "MongoDB.Driver >= 2.4.0",
+      "Newtonsoft.Json",
       "System.Xml.XmlSerializer >= 4.3.0",
       "linqtotwitter >= 4.1.0"
     ],

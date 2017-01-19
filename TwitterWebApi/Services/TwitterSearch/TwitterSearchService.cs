@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using LinqToTwitter;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using TwitterWebApi.Exceptions;
 using TwitterWebApi.Models;
 
@@ -38,7 +41,7 @@ namespace TwitterWebApi.Services.TwitterSearch
             {
                 IQueryable<Search> query = from s in _twitterCtx.Search
                     where s.Type == SearchType.Search && s.Query == $"\"#{handle}\"" &&
-                          s.Count == pageSize
+                          s.Count == pageSize && s.ResultType == ResultType.Recent
                     select s;
 
                 if (sinceId.HasValue) query = query.Where(x => x.SinceID == sinceId.Value);
@@ -48,16 +51,10 @@ namespace TwitterWebApi.Services.TwitterSearch
                 if (search == null)
                     throw new NoDataException("No search results found");
 
+                //File.WriteAllText("fakeresponse.json", JsonConvert.SerializeObject(search, Formatting.Indented));
 
                 List<Tweet> statuses = search.Statuses
-                    .Select(x => new Tweet
-                    {
-                        Text = x.Text,
-                        Name = x.User?.Name,
-                        StatusID = x.StatusID,
-                        CreatedAt = x.CreatedAt,
-                        ProfilePicUrl = x.User?.ProfileImageUrlHttps
-                    }).ToList();
+                    .Select(Mapper.Map<Tweet>).ToList();
 
                 return new SearchResult
                     {
