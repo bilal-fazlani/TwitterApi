@@ -38,11 +38,19 @@ namespace TwitterWebApi.Controllers
             }
             catch (ValidationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new
+                {
+                    message=ex.Message,
+                    starckTrace = ex.StackTrace
+                });
             }
             catch (NoDataException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new
+                {
+                    message=ex.Message,
+                    starckTrace = ex.StackTrace
+                });
             }
         }
     }
