@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using TwitterWebApi.Models;
 
-namespace TwitterWebApi.Services.TwitterSearch
+namespace TwitterWebApi.ExternalServices.TwitterSearch
 {
     public interface ITwitterSearchService
     {

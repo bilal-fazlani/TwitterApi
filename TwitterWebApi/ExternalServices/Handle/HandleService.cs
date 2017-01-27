@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace TwitterWebApi.Services.Handle
+namespace TwitterWebApi.ExternalServices.Handle
 {
     public class HandleService : IHandleService
     {

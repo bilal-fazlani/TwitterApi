@@ -2,8 +2,8 @@
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TwitterWebApi.ExternalServices.Handle;
 using TwitterWebApi.Models;
-using TwitterWebApi.Services.Handle;
 
 namespace TwitterWebApi.Controllers
 {

@@ -6,9 +6,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Converters;
-using TwitterWebApi.Models.AutomapperProfiles;
-using TwitterWebApi.Services.Handle;
-using TwitterWebApi.Services.TwitterSearch;
+using TwitterWebApi.AutomapperProfiles;
+using TwitterWebApi.ExternalServices.Handle;
+using TwitterWebApi.ExternalServices.TwitterSearch;
+using TwitterWebApi.Services;
 
 namespace TwitterWebApi
 {
@@ -39,6 +40,10 @@ namespace TwitterWebApi
             services.AddCors();
             services.AddSingleton<IConfiguration>(Configuration);
 
+            services.AddSingleton<TweetDivider>();
+            services.AddSingleton<TwitterComponentManager>();
+            services.AddSingleton<TweetProfile>();
+
             if (Configuration["mode"] == "online")
             {
                 services.AddSingleton<IHandleService, HandleService>();
@@ -49,13 +54,14 @@ namespace TwitterWebApi
                 services.AddSingleton<IHandleService, InMemoryHandleService>();
                 services.AddSingleton<ITwitterSearchService, InMemoryTwitterSearchService>();
             }
-
-            Mapper.Initialize(mapperConfiguration => mapperConfiguration.AddProfile(new TweetProfile()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+            IServiceProvider serviceProvider)
         {
+            Mapper.Initialize(c => c.AddProfile(serviceProvider.GetService<TweetProfile>()));
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 

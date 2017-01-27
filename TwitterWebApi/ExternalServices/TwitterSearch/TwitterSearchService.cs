@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using TwitterWebApi.Exceptions;
 using TwitterWebApi.Models;
 
-namespace TwitterWebApi.Services.TwitterSearch
+namespace TwitterWebApi.ExternalServices.TwitterSearch
 {
     public class TwitterSearchService : ITwitterSearchService
     {

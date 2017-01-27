@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace TwitterWebApi.Services.Handle
+namespace TwitterWebApi.ExternalServices.Handle
 {
     public interface IHandleService
     {

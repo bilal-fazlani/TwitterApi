@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TwitterWebApi.Exceptions;
+using TwitterWebApi.ExternalServices.TwitterSearch;
 using TwitterWebApi.Models;
-using TwitterWebApi.Services.TwitterSearch;
 
 namespace TwitterWebApi.Controllers
 {

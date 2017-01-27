@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using LinqToTwitter;
 using Newtonsoft.Json;
-using TwitterWebApi.Exceptions;
 using TwitterWebApi.Models;
 
-namespace TwitterWebApi.Services.TwitterSearch
+namespace TwitterWebApi.ExternalServices.TwitterSearch
 {
     public class InMemoryTwitterSearchService : ITwitterSearchService
     {

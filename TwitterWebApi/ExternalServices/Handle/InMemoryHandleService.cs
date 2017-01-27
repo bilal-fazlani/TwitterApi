@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 
-namespace TwitterWebApi.Services.Handle
+namespace TwitterWebApi.ExternalServices.Handle
 {
     public class InMemoryHandleService : IHandleService
     {
