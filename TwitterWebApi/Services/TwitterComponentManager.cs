@@ -2,6 +2,7 @@
 using System.Linq;
 using LinqToTwitter;
 using TwitterWebApi.Models;
+using TwitterWebApi.Models.Components;
 
 namespace TwitterWebApi.Services
 {

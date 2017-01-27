@@ -59,7 +59,7 @@ namespace TwitterWebApi.ExternalServices.TwitterSearch
                 return new SearchResult
                     {
                         SinceId = sinceId,
-                        LastId = statuses.LastOrDefault()?.StatusID,
+                        LastId = statuses.LastOrDefault()?.StatusId,
                         PageSize = pageSize,
                         Statuses = statuses
                     };

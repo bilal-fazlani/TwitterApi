@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TwitterWebApi.Models.Components;
 
 namespace TwitterWebApi.Models
 {
@@ -7,7 +8,7 @@ namespace TwitterWebApi.Models
     {
         public string Name { get; set; }
 
-        public ulong? StatusID { get; set; }
+        public ulong? StatusId { get; set; }
 
         public DateTime? CreatedAt { get; set; }
 
