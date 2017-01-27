@@ -11,95 +11,105 @@ namespace TwitterWebApi.Models.AutomapperProfiles
     {
         public TweetProfile()
         {
-            CreateMap<Status, List<TweetComponentBase>>()
-                .ConstructUsing(ConvertToTweetComponents);
-
-
             CreateMap<Status, Tweet>()
                 .ForMember(x=>x.Name, y=>y.MapFrom(z=>z.User.Name))
                 .ForMember(x=>x.ProfilePicUrl, y=>y.MapFrom(z=>z.User.ProfileImageUrlHttps))
                 .ForMember(x=>x.VerifiedUser, y=>y.MapFrom(z=>z.User.Verified))
                 .ForMember(x=>x.IncludeRetweets, y=>y.MapFrom(z=>z.RetweetedStatus.StatusID != 0))
                 .ForMember(x=>x.RetweetedTweet, y=>y.MapFrom(z=> z.RetweetedStatus.StatusID != 0 ? z.RetweetedStatus : null)).MaxDepth(4)
-                .ForMember(x=>x.TweetComponents, y=>y.MapFrom(z=> z))
+                .ForMember(x=>x.TweetComponents, y=>y.MapFrom(z=> CreateComponents(z).ToList()))
                 ;
         }
 
-        private List<EntityBase> GetInputEntities(Entities entities)
+        private static IEnumerable<EntityBase> GetInputEntities(Entities entities)
         {
             return entities.UrlEntities
                 .Union<EntityBase>(entities.HashTagEntities)
                 .Union(entities.UserMentionEntities)
                 .Union(entities.SymbolEntities)
                 .Union(entities.MediaEntities)
-                .OrderBy(x=>x.Start)
-                .ToList();
+                .OrderBy(x => x.Start);
         }
 
-        private List<TweetComponentBase> ConvertToTweetComponents(Status status)
+
+        private static List<int> CreateDivisions(Status status)
         {
-            List<EntityBase> inputEntities = GetInputEntities(status.Entities);
+            List<EntityBase> inputEntities = GetInputEntities(status.Entities).ToList();
 
-            if (!inputEntities.Any())
+            bool? isLastSpecial = null;
+
+            List<int> divisions = new List<int>();
+
+            foreach (var inspection in Enumerable.Range(0, status.Text.Length)
+                .Select(index => new{IsSpecial = IsCharacterSpecial(index, inputEntities), Index = index}))
             {
-                return new List<TweetComponentBase>()
+                if (isLastSpecial != inspection.IsSpecial)
                 {
-                    new TextComponent
+                    if(divisions.Count > 0)
                     {
-                        Start = 0,
-                        End = status.Text.Length -1,
-                        Text = status.Text,
-                        TweetComponentType = TweetComponentType.Text
+                        divisions.Add(inspection.Index-1); //end previous text block
                     }
-                };
-            }
 
-            List<TweetComponentBase> outputComponents = new List<TweetComponentBase>();
-
-            foreach (EntityBase entity in inputEntities)
-            {
-                if (!outputComponents.Any())//is first
-                {
-                    if (entity.Start == 0) // is special
-                    {
-                        AddSpecialComponent(outputComponents, entity);
-                        continue;
-                    }
-                    else // is text
-                    {
-                        AddTextComponent(status.Text, outputComponents, 0, entity);
-                    }
+                    divisions.Add(inspection.Index); // start new text block
                 }
 
-                bool isSpecial = outputComponents.Last().End + 1 == entity.Start;
-                if (!isSpecial)
+                if (inspection.Index+1 == status.Text.Length) //end
                 {
-                    AddTextComponent(status.Text, outputComponents,outputComponents.Last().End +1, entity);
+                    divisions.Add(status.Text.Length); //end last text block
                 }
-                AddSpecialComponent(outputComponents, entity);
+
+                isLastSpecial = inspection.IsSpecial;
             }
 
-            return outputComponents;
+            return divisions;
         }
 
-        private static void AddTextComponent(string text, ICollection<TweetComponentBase> components, int start, EntityBase entity)
+        private static IEnumerable<TweetComponentBase> CreateComponents(Status status)
         {
-            components.Add(new TextComponent
+            List<int> divisions = CreateDivisions(status);
+
+            for (int i = 0; i < divisions.Count; i++)
+            {
+                if (i % 2 != 0) continue;
+
+                int start = divisions[i];
+                int end = divisions[i + 1];
+
+                IEnumerable<EntityBase> entities = GetInputEntities(status.Entities);
+                EntityBase entity = entities.SingleOrDefault(x => x.Start == start && x.End == end);
+                if (entity == null)
+                {
+                    yield return GetTextComponent(status.Text, start, end);
+                }
+                else
+                {
+                    yield return GetSpecialComponent(entity);
+                }
+            }
+        }
+
+        private static bool IsCharacterSpecial(int index, IEnumerable<EntityBase> entities)
+        {
+            return entities.Any(e => index >= e.Start && index <= e.End);
+        }
+
+        private static TextComponent GetTextComponent(string text, int start, int end)
+        {
+            return(new TextComponent
             {
                 Start = start,
-                End = entity.Start - 1,
-                Text = text.Substring(0, entity.Start - 1).HtmlDecode(),
+                End = end,
+                Text = text.Substring(start, end - start).HtmlDecode(),
                 TweetComponentType = TweetComponentType.Text
             });
         }
 
-        private static void AddSpecialComponent(ICollection<TweetComponentBase> components, EntityBase entity)
+        private static TweetComponentBase GetSpecialComponent(EntityBase entityBase)
         {
-            if (entity is MediaEntity)
+            MediaEntity mediaEntity = entityBase as MediaEntity;
+            if (mediaEntity != null)
             {
-                MediaEntity mediaEntity = (MediaEntity) entity;
-
-                components.Add(new MediaComponent
+                return (new MediaComponent
                 {
                     Start = mediaEntity.Start,
                     End = mediaEntity.End,
@@ -113,23 +123,23 @@ namespace TwitterWebApi.Models.AutomapperProfiles
                     TweetComponentType = TweetComponentType.Media
                 });
             }
-            else if (entity is SymbolEntity)
-            {
-                SymbolEntity urlEntity = (SymbolEntity) entity;
 
-                components.Add(new SymbolComponent
+            SymbolEntity symbolEntity = entityBase as SymbolEntity;
+            if (symbolEntity != null)
+            {
+                return (new SymbolComponent
                 {
-                    Start = urlEntity.Start,
-                    End = urlEntity.End,
-                    Text = urlEntity.Text,
+                    Start = symbolEntity.Start,
+                    End = symbolEntity.End,
+                    Text = symbolEntity.Text,
                     TweetComponentType = TweetComponentType.Symbol
                 });
             }
-            else if (entity is UrlEntity)
-            {
-                UrlEntity urlEntity = (UrlEntity) entity;
 
-                components.Add(new UrlComponent
+            UrlEntity urlEntity = entityBase as UrlEntity;
+            if (urlEntity != null)
+            {
+                return (new UrlComponent
                 {
                     Start = urlEntity.Start,
                     End = urlEntity.End,
@@ -138,23 +148,23 @@ namespace TwitterWebApi.Models.AutomapperProfiles
                     TweetComponentType = TweetComponentType.Url
                 });
             }
-            else if (entity is HashTagEntity)
-            {
-                HashTagEntity hashTagEntity = (HashTagEntity) entity;
 
-                components.Add(new HashTagComponent
+            HashTagEntity tagEntity = entityBase as HashTagEntity;
+            if (tagEntity != null)
+            {
+                return(new HashTagComponent
                 {
-                    Start = hashTagEntity.Start,
-                    End = hashTagEntity.End,
-                    Text = hashTagEntity.Tag,
+                    Start = tagEntity.Start,
+                    End = tagEntity.End,
+                    Text = "#"+tagEntity.Tag,
                     TweetComponentType = TweetComponentType.HashTag
                 });
             }
-            else if (entity is UserMentionEntity)
-            {
-                UserMentionEntity userMentionEntity = (UserMentionEntity) entity;
 
-                components.Add(new UserMentionCompponent()
+            UserMentionEntity userMentionEntity = entityBase as UserMentionEntity;
+            if (userMentionEntity != null)
+            {
+                return(new UserMentionCompponent()
                 {
                     Start = userMentionEntity.Start,
                     End = userMentionEntity.End,
@@ -164,10 +174,8 @@ namespace TwitterWebApi.Models.AutomapperProfiles
                     TweetComponentType = TweetComponentType.UserMention
                 });
             }
-            else
-            {
-                throw new NotImplementedException($"case for ${entity.GetType().Name} is not implemented");
-            }
+
+            throw new NotImplementedException($"code for ${entityBase.GetType().Name} is not implemented");
         }
     }
 }
