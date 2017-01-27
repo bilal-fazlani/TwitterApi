@@ -21,7 +21,8 @@
     "MongoDB.Driver": "2.4.0",
     "Microsoft.AspNetCore.Cors": "*",
     "Automapper": "*",
-    "Newtonsoft.Json": "*"
+    "Newtonsoft.Json": "*",
+    "Microsoft.Extensions.Configuration.CommandLine":"*"
   },
 
   "tools": {
