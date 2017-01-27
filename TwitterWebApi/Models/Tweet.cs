@@ -20,29 +20,8 @@ namespace TwitterWebApi.Models
 
         public bool VerifiedUser { get; set; }
 
-        public List<TweetComponent> TweetComponents { get; set; }
+        public List<TweetComponentBase> TweetComponents { get; set; }
 
         public string Text { get; set; }
-    }
-
-    public class TweetComponent
-    {
-        public string Url { get; set; }
-
-        public string Text { get; set; }
-
-        public TweetComponentType TweetComponentType { get; set; }
-
-        public int Start { get; set; }
-
-        public int End { get; set; }
-    }
-
-    public enum TweetComponentType
-    {
-        Text = 0,
-        Url = 1,
-        UserMention = 2,
-        HashTag = 3
     }
 }
