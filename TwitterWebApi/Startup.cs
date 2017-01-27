@@ -40,6 +40,7 @@ namespace TwitterWebApi
             services.AddCors();
             services.AddSingleton<IConfiguration>(Configuration);
 
+            services.AddSingleton<ComponentFactory>();
             services.AddSingleton<TweetDivider>();
             services.AddSingleton<TwitterComponentManager>();
             services.AddSingleton<TweetProfile>();
