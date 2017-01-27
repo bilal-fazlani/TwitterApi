@@ -40,7 +40,7 @@ namespace TwitterWebApi.Controllers
             {
                 return BadRequest(new
                 {
-                    message=ex.Message,
+                    message = ex.Message,
                     starckTrace = ex.StackTrace
                 });
             }
@@ -48,8 +48,17 @@ namespace TwitterWebApi.Controllers
             {
                 return NotFound(new
                 {
-                    message=ex.Message,
+                    message = ex.Message,
                     starckTrace = ex.StackTrace
+                });
+            }
+            catch (Exception ex)
+            {
+                Exception e = ex.GetBaseException();
+                return StatusCode(500, new
+                {
+                    message = e.Message,
+                    starckTrace = e.StackTrace
                 });
             }
         }
